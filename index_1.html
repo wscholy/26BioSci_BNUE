@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생명과학 뉴스 — 3주차</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --ink:       #181614;
+  --ink-2:     #3D3A36;
+  --ink-3:     #7A756F;
+  --ink-4:     #B0AAA3;
+  --bg:        #FAF8F4;
+  --surface:   #FFFFFF;
+  --rule:      #D8D3CC;
+  --rule-heavy:#9B958D;
+  --serif:     'Noto Serif KR', 'Playfair Display', serif;
+  --display:   'Playfair Display', serif;
+  --sans:      'Noto Sans KR', sans-serif;
+  --mono:      'DM Mono', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.75;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: var(--surface);
+  border-bottom: 3px double var(--ink);
+  padding: 2rem 2rem 1.25rem;
+  text-align: center;
+}
+
+.masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.masthead-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.masthead-title {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+
+.masthead-subtitle {
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  color: var(--ink-3);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.masthead-rule { height: 1px; background: var(--rule); margin-top: 1.1rem; }
+
+.week-ticker {
+  background: var(--ink);
+  color: #fff;
+  text-align: center;
+  padding: 0.4rem;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── LAYOUT ── */
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+/* ── ARTICLE CARD ── */
+.article {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.2s ease;
+}
+
+.article.visible { opacity: 1; transform: translateY(0); }
+.article:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+
+/* Label bar */
+.article-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.label-left { display: flex; align-items: center; gap: 0.75rem; }
+
+.article-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--surface);
+  background: var(--ink);
+  padding: 0.18rem 0.5rem;
+  letter-spacing: 0.06em;
+}
+
+.article-category {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.article-source {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+/* Two-column body */
+.article-body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+
+@media (max-width: 680px) {
+  .article-body { grid-template-columns: 1fr; }
+  .article-image-col { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+
+/* Image column */
+.article-image-col {
+  border-right: 1px solid var(--rule);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #F9F7F3;
+}
+
+.img-slot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  border: 1px solid var(--rule);
+  background: #EFEcE7;
+  overflow: hidden;
+}
+
+/* Real image fills the slot */
+.img-slot img.has-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+/* Placeholder */
+.img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1rem;
+}
+
+.ph-icon {
+  width: 34px;
+  height: 34px;
+  border: 1.5px dashed var(--rule-heavy);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-4);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ph-text {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-4);
+  text-align: center;
+  line-height: 1.65;
+  letter-spacing: 0.03em;
+}
+
+.ph-fname {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  background: #E2DDD7;
+  padding: 0.22rem 0.6rem;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+}
+
+.img-caption {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--ink-3);
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Text column */
+.article-text-col {
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.01em;
+}
+
+.article-title-en {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-4);
+  letter-spacing: 0.03em;
+  margin-bottom: 1rem;
+}
+
+.article-summary {
+  font-size: 0.875rem;
+  line-height: 1.9;
+  color: var(--ink-2);
+  font-weight: 300;
+  flex: 1;
+}
+
+.article-summary strong { font-weight: 500; color: var(--ink); }
+.article-summary em { font-style: italic; color: var(--ink-3); }
+
+.insight-bar {
+  margin-top: 1rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--ink);
+  background: var(--bg);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.insight-bar strong { font-weight: 500; color: var(--ink); }
+
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  text-decoration: none;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  width: fit-content;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.read-more:hover { color: var(--ink); border-color: var(--ink); }
+.read-more::after { content: ' →'; }
+
+/* Section rule */
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0 1.75rem;
+}
+
+.section-rule::before,
+.section-rule::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+.section-rule span {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Footer */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.4);
+  padding: 1.75rem 2rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  line-height: 2;
+}
+
+footer code {
+  background: rgba(255,255,255,0.08);
+  padding: 0.1rem 0.45rem;
+  border-radius: 2px;
+  color: rgba(255,255,255,0.65);
+  font-size: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="masthead">
+    <div class="masthead-top">
+      <span class="masthead-meta">이해와 가치실현을 위한 생명과학</span>
+      <span class="masthead-meta">Vol. 3 · 2026.03.24</span>
+      <span class="masthead-meta">4 Articles</span>
+    </div>
+    <div class="masthead-title">생명과학 뉴스</div>
+    <div class="masthead-subtitle">Biological Science News — Week 3</div>
+    <div class="masthead-rule"></div>
+  </div>
+  <div class="week-ticker">3rd Week · Spring 2026 · Biological Science News Digest</div>
+</header>
+
+<main class="container">
+
+  <div class="section-rule"><span>이번 주 주요 연구 4선</span></div>
+
+  <!-- ── Article 1 ── -->
+  <article class="article">
+    <div class="article-label">
+      <div class="label-left">
+        <span class="article-num">01</span>
+        <span class="article-category">합성생물학 · 종양학</span>
+      </div>
+      <span class="article-source">출처: PLOS Biology (2026.03.17) · Shandong University</span>
+    </div>
+    <div class="article-body">
+      <div class="article-image-col">
+        <div class="img-slot" id="slot1">
+          <img class="has-image" src="article1.png" alt="세균 종양 치료 그림" onerror="handleImgError(this)">
+          <div class="img-placeholder" id="ph1">
+            <div class="ph-icon">+</div>
+            <div class="ph-text">논문 그림 또는 스캔 이미지를<br>아래 파일명으로 저장 후 업로드</div>
+            <span class="ph-fname">article1.png</span>
+          </div>
+        </div>
+        <p class="img-caption">논문의 Fig. 또는 스캔 이미지를 <strong>article1.png</strong> 파일명으로 저장 후 index.html과 같은 폴더에 업로드하면 자동 표시됩니다.</p>
+      </div>
+      <div class="article-text-col">
+        <h2 class="article-title">세균을 종양 사냥꾼으로 — 암세포 내부에서 항암제 직접 방출</h2>
+        <span class="article-title-en">Scientists Turn Bacteria Into Tiny Tumor Hunters That Kill Cancer</span>
+        <p class="article-summary">
+          암세포가 모여 있는 종양 내부는 산소가 거의 없고 영양이 풍부한 환경입니다.
+          중국 연구팀은 이 특성을 이용해, 원래 장에 사는 무해한 세균(<em>E. coli</em> Nissle 1917)을
+          유전공학으로 개조하여 종양을 스스로 찾아가 <strong>항암제를 현장에서 직접 만들어 방출</strong>하도록 설계했습니다.
+          쥐 실험에서 효과가 확인됐으나, 아직 동물 실험 단계이며 인체 적용까지는 추가 안전성 검증이 필요합니다.
+        </p>
+        <div class="insight-bar"><strong>핵심 포인트:</strong> 세균의 종양 집중 성질 + 항암제 합성 능력 = 이중 작용 치료 전략</div>
+        <a class="read-more" href="https://scitechdaily.com/scientists-turn-bacteria-into-tiny-tumor-hunters-that-kill-cancer/" target="_blank">원문 읽기</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Article 2 ── -->
+  <article class="article">
+    <div class="article-label">
+      <div class="label-left">
+        <span class="article-num">02</span>
+        <span class="article-category">구조생물학 · 기술개발</span>
+      </div>
+      <span class="article-source">출처: PNAS (2026.03.20) · MIT Department of Biology</span>
+    </div>
+    <div class="article-body">
+      <div class="article-image-col">
+        <div class="img-slot" id="slot2">
+          <img class="has-image" src="article2.png" alt="CryoPRISM 기술 그림" onerror="handleImgError(this)">
+          <div class="img-placeholder" id="ph2">
+            <div class="ph-icon">+</div>
+            <div class="ph-text">논문 그림 또는 스캔 이미지를<br>아래 파일명으로 저장 후 업로드</div>
+            <span class="ph-fname">article2.png</span>
+          </div>
+        </div>
+        <p class="img-caption">논문의 Fig. 또는 스캔 이미지를 <strong>article2.png</strong> 파일명으로 저장 후 index.html과 같은 폴더에 업로드하면 자동 표시됩니다.</p>
+      </div>
+      <div class="article-text-col">
+        <h2 class="article-title">CryoPRISM — 세포 분자를 더 자연에 가깝게 관찰하는 새 기술</h2>
+        <span class="article-title-en">CryoPRISM: A new tool for observing cellular machinery in a more natural environment</span>
+        <p class="article-summary">
+          세포 속 분자들은 세포 밖으로 꺼내는 순간 구조가 변할 수 있습니다 —
+          심해어를 수면으로 끌어올리면 형태가 달라지는 것과 같은 이치입니다.
+          MIT 연구팀은 세포를 막 파열시킨 직후 분자를 촬영해 이 문제를 줄인 새로운 관찰 기술
+          <strong>cryoPRISM</strong>을 개발했습니다. 이를 통해 50년 이상 연구된 세균의
+          리보솜(단백질 합성 기계)에서도 그동안 발견되지 않았던 새로운 상태를 확인했으며,
+          비용 대비 높은 정밀도로 다양한 분자 연구에 활용될 것으로 기대됩니다.
+        </p>
+        <div class="insight-bar"><strong>핵심 포인트:</strong> 분리 없이 관찰 → 자연 상태에 가까운 구조 이미징 가능</div>
+        <a class="read-more" href="https://news.mit.edu/2026/cryoprism-tool-for-observing-cellular-machinery-more-natural-environment-0320" target="_blank">원문 읽기</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Article 3 ── -->
+  <article class="article">
+    <div class="article-label">
+      <div class="label-left">
+        <span class="article-num">03</span>
+        <span class="article-category">신경과학 · 행동생물학</span>
+      </div>
+      <span class="article-source">출처: Nature Communications (2025.12.17) · OIST</span>
+    </div>
+    <div class="article-body">
+      <div class="article-image-col">
+        <div class="img-slot" id="slot3">
+          <img class="has-image" src="article3.png" alt="아세틸콜린 뇌 그림" onerror="handleImgError(this)">
+          <div class="img-placeholder" id="ph3">
+            <div class="ph-icon">+</div>
+            <div class="ph-text">논문 그림 또는 스캔 이미지를<br>아래 파일명으로 저장 후 업로드</div>
+            <span class="ph-fname">article3.png</span>
+          </div>
+        </div>
+        <p class="img-caption">논문의 Fig. 또는 스캔 이미지를 <strong>article3.png</strong> 파일명으로 저장 후 index.html과 같은 폴더에 업로드하면 자동 표시됩니다.</p>
+      </div>
+      <div class="article-text-col">
+        <h2 class="article-title">나쁜 습관을 깨는 뇌 속 화학물질 — 아세틸콜린의 역할</h2>
+        <span class="article-title-en">Scientists Discover the Brain Chemical That Helps Break Old Habits</span>
+        <p class="article-summary">
+          습관을 바꾸기 어려운 이유가 뇌 화학물질과 관련 있다는 연구가 나왔습니다.
+          일본 OIST 연구팀은 쥐가 익숙한 행동 패턴이 더 이상 보상으로 이어지지 않을 때,
+          뇌의 선조체라는 영역에서 <strong>아세틸콜린</strong>이라는 물질 분비가 늘어나고
+          그 직후 행동을 바꾸는 빈도가 높아지는 것을 실시간으로 관찰했습니다.
+          <strong>"이 방식은 더 이상 안 통해"라는 신호</strong>를 뇌에 전달하는 화학물질을 찾아낸 것으로,
+          중독·강박장애·파킨슨병 치료의 새로운 실마리가 될 수 있습니다.
+        </p>
+        <div class="insight-bar"><strong>핵심 포인트:</strong> 아세틸콜린 ↑ → 선조체 활성화 → 행동 유연성 증가</div>
+        <a class="read-more" href="https://scitechdaily.com/scientists-discover-the-brain-chemical-that-helps-break-old-habits/" target="_blank">원문 읽기</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- ── Article 4 ── -->
+  <article class="article">
+    <div class="article-label">
+      <div class="label-left">
+        <span class="article-num">04</span>
+        <span class="article-category">사회생물학 · 노화과학</span>
+      </div>
+      <span class="article-source">출처: PNAS (2026.02.18) · NYU · Indiana University</span>
+    </div>
+    <div class="article-body">
+      <div class="article-image-col">
+        <div class="img-slot" id="slot4">
+          <img class="has-image" src="article4.png" alt="부정적 사회관계 노화 그래프" onerror="handleImgError(this)">
+          <div class="img-placeholder" id="ph4">
+            <div class="ph-icon">+</div>
+            <div class="ph-text">논문 그림 또는 스캔 이미지를<br>아래 파일명으로 저장 후 업로드</div>
+            <span class="ph-fname">article4.png</span>
+          </div>
+        </div>
+        <p class="img-caption">논문의 Fig. 또는 스캔 이미지를 <strong>article4.png</strong> 파일명으로 저장 후 index.html과 같은 폴더에 업로드하면 자동 표시됩니다.</p>
+      </div>
+      <div class="article-text-col">
+        <h2 class="article-title">나를 힘들게 하는 사람이 있으면 몸이 더 빨리 늙는다</h2>
+        <span class="article-title-en">Negative social ties as emerging risk factors for accelerated aging, inflammation, and multimorbidity</span>
+        <p class="article-summary">
+          주변에 나를 힘들게 하는 사람("hassler")이 있으면 실제로 몸이 더 빨리 늙는다는 연구입니다.
+          미국 연구팀이 약 2,300명의 침 샘플에서 <strong>DNA 메틸화 패턴</strong>으로
+          생물학적 나이를 측정한 결과, 해슬러가 한 명 늘어날수록 노화 속도가 빨라졌고,
+          특히 가족 구성원일 때 영향이 더 컸습니다. 응답자의 약 30%가 가까운 관계 안에 해슬러가 있다고 답했으며,
+          스트레스가 면역계와 염증 반응을 만성적으로 자극해 노화를 앞당긴다는 기존 이론을
+          생물학적으로 실증했다는 점에서 주목받고 있습니다.
+        </p>
+        <div class="insight-bar"><strong>핵심 포인트:</strong> 부정적 관계 → 만성 스트레스 → DNA 메틸화 변화 → 생물학적 노화 가속</div>
+        <a class="read-more" href="https://www.pnas.org/doi/10.1073/pnas.2515331123" target="_blank">원문 읽기</a>
+      </div>
+    </div>
+  </article>
+
+  <div class="section-rule"><span>end of week 3</span></div>
+
+</main>
+
+<footer>
+  이해와 가치실현을 위한 생명과학 · 2026학년도 1학기<br>
+  이미지 업로드: <code>article1.png</code> <code>article2.png</code> <code>article3.png</code> <code>article4.png</code> 을 index.html과 같은 폴더에 저장하면 자동 연결됩니다
+</footer>
+
+<script>
+  /* 이미지 오류 처리: 파일 없으면 img 숨기고 placeholder 표시 */
+  function handleImgError(img) {
+    img.style.display = 'none';
+  }
+
+  /* 스크롤 애니메이션 */
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.article').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.07) + 's';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
