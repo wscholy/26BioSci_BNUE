@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이해와 가치실현을 위한 생명과학 — 2026 Spring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+
+:root{
+  --navy:     #1A2E44;
+  --navy-mid: #243D57;
+  --navy-lt:  #2E5070;
+  --accent:   #C8A96E;
+  --accent-lt:#E5CFA0;
+  --bg:       #F5F3EE;
+  --surface:  #FFFFFF;
+  --ink:      #1C1A17;
+  --ink-2:    #3D3A35;
+  --ink-3:    #7A756F;
+  --ink-4:    #B0AAA3;
+  --rule:     #DDD9D3;
+  --sidebar-w:248px;
+  --serif:'Noto Serif KR',serif;
+  --display:'Playfair Display',serif;
+  --sans:'Noto Sans KR',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+body{
+  display:flex;flex-direction:column;
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── TOP BAR ── */
+.topbar{
+  height:48px;min-height:48px;
+  background:var(--navy);
+  display:flex;align-items:center;
+  padding:0 1.25rem;gap:1rem;
+  z-index:100;
+  border-bottom:2px solid var(--accent);
+  flex-shrink:0;
+}
+
+.topbar-burger{
+  display:none;background:none;border:none;
+  color:rgba(255,255,255,.7);cursor:pointer;
+  font-size:18px;line-height:1;padding:4px;
+}
+
+.topbar-course{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:rgba(255,255,255,.4);
+  text-transform:uppercase;
+}
+
+.topbar-title{
+  font-family:var(--display);font-size:15px;
+  font-weight:700;color:#fff;letter-spacing:-.01em;
+}
+
+.topbar-sep{width:1px;height:18px;background:rgba(255,255,255,.2)}
+
+.topbar-term{
+  font-family:var(--mono);font-size:10px;
+  color:var(--accent-lt);letter-spacing:.06em;
+  margin-left:auto;
+}
+
+/* ── SHELL ── */
+.shell{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  transition:transform .25s ease;z-index:50;
+}
+
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+.sidebar-hero{
+  padding:1.25rem 1.25rem 1rem;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-lbl{
+  font-family:var(--mono);font-size:9px;
+  color:rgba(255,255,255,.3);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:.35rem;
+}
+
+.sidebar-name{
+  font-family:var(--serif);font-size:13px;
+  font-weight:600;color:#fff;line-height:1.45;
+  margin-bottom:.5rem;
+}
+
+.pills{display:flex;flex-wrap:wrap;gap:.3rem}
+
+.pill{
+  font-family:var(--mono);font-size:9px;
+  padding:.18rem .55rem;border-radius:2px;
+  letter-spacing:.05em;
+}
+
+.pill-a{background:var(--accent);color:var(--navy)}
+.pill-o{border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.45)}
+
+/* Nav section */
+.nav-sec{padding:.7rem 0 .2rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-sec:last-child{border-bottom:none}
+
+.nav-sec-title{
+  font-family:var(--mono);font-size:9px;
+  color:rgba(255,255,255,.28);letter-spacing:.14em;
+  text-transform:uppercase;padding:0 1.25rem .35rem;
+}
+
+.nav-item{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.48rem 1.25rem;
+  cursor:pointer;border:none;background:none;
+  width:100%;text-align:left;
+  color:rgba(255,255,255,.58);
+  font-family:var(--sans);font-size:12.5px;
+  font-weight:300;line-height:1.4;
+  position:relative;transition:background .12s,color .12s;
+}
+
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+
+.nav-item.active{
+  background:rgba(200,169,110,.12);
+  color:var(--accent-lt);
+}
+
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--accent);
+}
+
+.ndot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.2);flex-shrink:0;
+}
+
+.nav-item.active .ndot{background:var(--accent)}
+
+.nbadge{
+  margin-left:auto;font-family:var(--mono);font-size:9px;
+  background:var(--accent);color:var(--navy);
+  padding:.1rem .4rem;border-radius:2px;font-weight:500;
+}
+
+.nbadge-dim{
+  margin-left:auto;font-family:var(--mono);font-size:9px;
+  background:rgba(255,255,255,.09);color:rgba(255,255,255,.45);
+  padding:.1rem .4rem;border-radius:2px;
+}
+
+/* ── CONTENT ── */
+.content-area{
+  flex:1;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--bg);
+}
+
+/* Welcome */
+.welcome{
+  flex:1;display:flex;
+  flex-direction:column;align-items:center;
+  justify-content:center;padding:2.5rem 1.5rem;
+  overflow-y:auto;
+}
+
+.welcome-inner{max-width:600px;width:100%}
+
+.w-eyebrow{
+  font-family:var(--mono);font-size:10px;
+  color:var(--ink-4);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:.7rem;
+}
+
+.w-title{
+  font-family:var(--display);
+  font-size:clamp(1.55rem,3.2vw,2.4rem);
+  font-weight:800;color:var(--ink);
+  line-height:1.15;letter-spacing:-.02em;
+  margin-bottom:.9rem;
+}
+
+.w-desc{
+  font-family:var(--serif);font-size:.92rem;
+  color:var(--ink-3);line-height:1.85;
+  font-weight:300;margin-bottom:1.6rem;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
+  gap:.65rem;margin-bottom:1.5rem;
+}
+
+.qcard{
+  background:var(--surface);border:1px solid var(--rule);
+  border-radius:3px;padding:.85rem 1rem;
+  cursor:pointer;transition:box-shadow .15s,border-color .15s;
+}
+
+.qcard:hover{
+  box-shadow:0 4px 14px rgba(0,0,0,.07);
+  border-color:var(--ink-4);
+}
+
+.qcard-icon{font-size:19px;display:block;margin-bottom:.35rem}
+.qcard-title{font-family:var(--serif);font-size:.8rem;font-weight:600;color:var(--ink);margin-bottom:.18rem}
+.qcard-desc{font-size:.73rem;color:var(--ink-3);font-weight:300;line-height:1.5}
+
+.w-rule{height:1px;background:var(--rule);margin-bottom:1.4rem}
+
+.info-tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.info-tbl tr{border-bottom:1px solid var(--rule)}
+.info-tbl tr:last-child{border-bottom:none}
+.info-tbl th{
+  text-align:left;padding:.5rem .7rem;
+  font-family:var(--mono);font-size:9.5px;
+  color:var(--ink-4);letter-spacing:.06em;
+  text-transform:uppercase;white-space:nowrap;
+  width:108px;background:var(--bg);font-weight:400;
+}
+.info-tbl td{padding:.5rem .7rem;color:var(--ink-2);font-weight:300;line-height:1.5}
+.info-tbl td strong{font-weight:500;color:var(--ink)}
+
+/* iframe */
+.content-iframe{
+  flex:1;border:none;width:100%;
+  display:none;background:#fff;
+}
+
+/* Mobile overlay */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.45);z-index:40;
+}
+
+@media(max-width:768px){
+  .sidebar{
+    position:fixed;top:48px;left:0;bottom:0;
+    transform:translateX(-100%);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .topbar-burger{display:flex;align-items:center;justify-content:center}
+  .topbar-course,.topbar-sep:first-of-type{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <button class="topbar-burger" onclick="toggleSidebar()">&#9776;</button>
+  <span class="topbar-sep"></span>
+  <span class="topbar-course">Biological Science</span>
+  <span class="topbar-title">이해와 가치실현을 위한 생명과학</span>
+  <span class="topbar-term">2026 · Spring</span>
+</div>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+
+    <div class="sidebar-hero">
+      <div class="sidebar-lbl">Course Portal</div>
+      <div class="sidebar-name">이해와 가치실현을<br>위한 생명과학</div>
+      <div class="pills">
+        <span class="pill pill-a">2026 Spring</span>
+        <span class="pill pill-o">3학년</span>
+        <span class="pill pill-o">교양필수</span>
+      </div>
+    </div>
+
+    <!-- 강의 개요 -->
+    <div class="nav-sec">
+      <div class="nav-sec-title">강의 개요</div>
+      <button class="nav-item active" data-src="welcome" onclick="load(this)">
+        <span class="ndot"></span>강의 홈
+      </button>
+      <button class="nav-item" data-src="syllabus.html" onclick="load(this)">
+        <span class="ndot"></span>강의계획서
+      </button>
+    </div>
+
+    <!-- 주차별 강의 -->
+    <div class="nav-sec">
+      <div class="nav-sec-title">주차별 강의</div>
+      <button class="nav-item" data-src="week01.html" onclick="load(this)">
+        <span class="ndot"></span>1주차 — 과학적 방법론
+      </button>
+      <button class="nav-item" data-src="week02.html" onclick="load(this)">
+        <span class="ndot"></span>2주차 — 세포와 생명
+      </button>
+      <button class="nav-item" data-src="week03.html" onclick="load(this)">
+        <span class="ndot"></span>3주차 — 유전과 단백질
+      </button>
+      <button class="nav-item" data-src="week04.html" onclick="load(this)">
+        <span class="ndot"></span>4주차 — 진화와 다양성
+        <span class="nbadge-dim">예정</span>
+      </button>
+    </div>
+
+    <!-- 생명과학 뉴스 -->
+    <div class="nav-sec">
+      <div class="nav-sec-title">생명과학 뉴스</div>
+      <button class="nav-item" data-src="news-week03.html" onclick="load(this)">
+        <span class="ndot"></span>3주차 뉴스
+        <span class="nbadge">NEW</span>
+      </button>
+      <button class="nav-item" data-src="news-week02.html" onclick="load(this)">
+        <span class="ndot"></span>2주차 뉴스
+      </button>
+      <button class="nav-item" data-src="news-week01.html" onclick="load(this)">
+        <span class="ndot"></span>1주차 뉴스
+      </button>
+    </div>
+
+    <!-- 과제 및 활동 -->
+    <div class="nav-sec">
+      <div class="nav-sec-title">과제 및 활동</div>
+      <button class="nav-item" data-src="assignment.html" onclick="load(this)">
+        <span class="ndot"></span>주차 사전 과제
+        <span class="nbadge-dim">W3</span>
+      </button>
+      <button class="nav-item" data-src="discussion.html" onclick="load(this)">
+        <span class="ndot"></span>유사과학 토의 자료
+      </button>
+    </div>
+
+    <!-- 참고자료 -->
+    <div class="nav-sec">
+      <div class="nav-sec-title">참고자료</div>
+      <button class="nav-item" data-src="reference.html" onclick="load(this)">
+        <span class="ndot"></span>강의 보조자료
+      </button>
+      <button class="nav-item" data-src="links.html" onclick="load(this)">
+        <span class="ndot"></span>유용한 링크 모음
+      </button>
+    </div>
+
+  </nav>
+
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+
+    <!-- Welcome screen (default) -->
+    <div class="welcome" id="welcome-screen">
+      <div class="welcome-inner">
+
+        <div class="w-eyebrow">2026학년도 1학기 · 교양필수</div>
+        <div class="w-title">이해와 가치실현을<br>위한 생명과학</div>
+        <div class="w-desc">
+          생명과학의 핵심 개념을 일상과 연결하고, 과학적 사고로 건강·환경·생명 관련 정보를 비판적으로 평가하는 능력을 기릅니다.
+          왼쪽 메뉴에서 강의 자료, 주차별 뉴스, 과제 자료를 확인하세요.
+        </div>
+
+        <div class="quick-grid">
+          <div class="qcard" onclick="loadSrc('news-week03.html')">
+            <span class="qcard-icon">📰</span>
+            <div class="qcard-title">이번 주 뉴스</div>
+            <div class="qcard-desc">세균 암 치료 · CryoPRISM · 아세틸콜린 · 노화</div>
+          </div>
+          <div class="qcard" onclick="loadSrc('discussion.html')">
+            <span class="qcard-icon">🔬</span>
+            <div class="qcard-title">유사과학 토의</div>
+            <div class="qcard-desc">간헐적 단식 · 해독주스 · 먹는 콜라겐 외</div>
+          </div>
+          <div class="qcard" onclick="loadSrc('assignment.html')">
+            <span class="qcard-icon">📋</span>
+            <div class="qcard-title">사전 과제</div>
+            <div class="qcard-desc">3주차 제출 양식</div>
+          </div>
+          <div class="qcard" onclick="loadSrc('reference.html')">
+            <span class="qcard-icon">📚</span>
+            <div class="qcard-title">강의 보조자료</div>
+            <div class="qcard-desc">노화 과학 · 유사과학 검증</div>
+          </div>
+        </div>
+
+        <div class="w-rule"></div>
+
+        <table class="info-tbl">
+          <tr><th>교과목</th><td>이해와 가치실현을 위한 생명과학</td></tr>
+          <tr><th>담당교수</th><td>조운석 · woonseok.cho@gmail.com</td></tr>
+          <tr><th>평가</th><td>기말시험 50% · 과제 30% · 수업참여 10% · 출석 10%</td></tr>
+          <tr><th>주교재</th><td>생활 속의 생명과학 제5판 (바이오사이언스, 2016)</td></tr>
+          <tr><th>부교재</th><td>생명 생물의 과학 제12판 (라이프사이언스)</td></tr>
+          <tr><th>현재 주차</th><td><strong>3주차</strong> — 2026.03.24</td></tr>
+        </table>
+
+      </div>
+    </div>
+
+    <!-- Content iframe -->
+    <iframe class="content-iframe" id="content-iframe" title="강의 콘텐츠"></iframe>
+
+  </div>
+</div>
+
+<script>
+const iframe  = document.getElementById('content-iframe');
+const welcome = document.getElementById('welcome-screen');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const allNav  = document.querySelectorAll('.nav-item');
+
+function setActive(src) {
+  allNav.forEach(btn => {
+    const match = btn.dataset.src === src || (src === 'welcome' && btn.dataset.src === 'welcome');
+    btn.classList.toggle('active', match);
+  });
+}
+
+function loadSrc(src) {
+  welcome.style.display = 'none';
+  iframe.style.display  = 'block';
+  iframe.src = src;
+  setActive(src);
+  closeSidebar();
+}
+
+function load(btn) {
+  const src = btn.dataset.src;
+  if (!src || src === 'welcome') {
+    iframe.style.display  = 'none';
+    welcome.style.display = 'flex';
+    setActive('welcome');
+    closeSidebar();
+    return;
+  }
+  loadSrc(src);
+}
+
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+}
+</script>
+</body>
+</html>
