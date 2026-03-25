@@ -21,13 +21,15 @@
 
 ```
 26BioSci_BNUE/
+├── style.css               # 공통 CSS (변수·리셋·베이스)
 ├── index.html              # 메인 포털 (사이드바 + iframe 구조)
+├── placeholder.html        # 준비 중 페이지 (미완성 링크 클릭 시 표시)
+├── news-template.html      # 뉴스 페이지 템플릿 (새 주차 작성 시 복사)
 ├── news-week03.html        # 3주차 생명과학 뉴스
-├── week3_article01.png     # 3주차 기사 이미지
-├── week3_article02.png
-├── week3_article03.png
-├── week3_article04.png
-└── README.md
+├── week3_article01.png     # 3주차 기사 이미지 01
+├── week3_article02.png     # 3주차 기사 이미지 02
+├── week3_article03.png     # 3주차 기사 이미지 03
+└── week3_article04.png     # 3주차 기사 이미지 04
 ```
 
 ### 추가 예정 파일
@@ -48,35 +50,33 @@
 
 ---
 
+## 새 주차 뉴스 페이지 추가 방법
+
+1. `news-template.html`을 복사하여 `news-weekNN.html`로 저장
+2. `★` 주석이 붙은 항목을 해당 주차 내용으로 수정
+3. 이미지 파일을 아래 규칙에 맞게 저장 후 같은 폴더에 업로드
+4. `index.html` 사이드바에 새 항목 추가
+
+### 이미지 파일명 규칙
+
+```
+weekN_article01.png
+weekN_article02.png
+weekN_article03.png
+weekN_article04.png
+```
+
+예시: 4주차 → `week4_article01.png`, `week4_article02.png` ...
+
+---
+
 ## 업데이트 이력
 
 | 날짜 | 내용 |
 |------|------|
 | 2026-03-24 | 최초 배포 — `index.html`, `news-week03.html`, 이미지 4종 |
 | 2026-03-25 | 가독성 개선 — 폰트 크기·웨이트 전반 조정 |
-
----
-
-## 차후 개선 계획
-
-### 1. 공통 CSS 분리
-현재 각 HTML 파일에 스타일이 내장(inline)되어 있어 디자인 변경 시 파일마다 개별 수정이 필요합니다.
-`style.css` 하나로 공통 스타일을 분리하면 전체 디자인을 일괄 변경할 수 있습니다.
-
-```
-style.css  ← 공통 CSS (variables, typography, layout, components)
-```
-
-### 2. 뉴스 페이지 템플릿화
-`news-template.html`을 기준 파일로 만들고, 매 주차마다 복사·수정하는 방식으로 일관된 디자인을 유지합니다.
-
-### 3. 미완성 페이지 처리
-현재 링크는 있으나 파일이 없는 페이지(week01~04 등) 클릭 시 흰 화면이 표시됩니다.
-공통 `placeholder.html`("준비 중" 안내 페이지)을 만들고 임시 연결합니다.
-
-### 4. 이미지 네이밍 규칙 통일
-현재 `week3_article01.png` / `article2.png` 등 혼재되어 있습니다.
-`weekN_articleN.png` 규칙으로 통일합니다.
+| 2026-03-25 | 구조 개선 — `style.css` 공통 분리, `news-template.html`, `placeholder.html` 추가 |
 
 ---
 

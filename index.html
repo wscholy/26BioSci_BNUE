@@ -7,37 +7,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-
+/* ── index.html 전용 변수 ── */
 :root{
-  --navy:     #1A2E44;
-  --navy-mid: #243D57;
-  --navy-lt:  #2E5070;
-  --accent:   #C8A96E;
-  --accent-lt:#E5CFA0;
-  --bg:       #F5F3EE;
-  --surface:  #FFFFFF;
-  --ink:      #1C1A17;
-  --ink-2:    #3D3A35;
-  --ink-3:    #7A756F;
-  --ink-4:    #B0AAA3;
-  --rule:     #DDD9D3;
-  --sidebar-w:248px;
-  --serif:'Noto Serif KR',serif;
-  --display:'Playfair Display',serif;
-  --sans:'Noto Sans KR',sans-serif;
-  --mono:'DM Mono',monospace;
+  --navy:      #1A2E44;
+  --navy-mid:  #243D57;
+  --navy-lt:   #2E5070;
+  --accent:    #C8A96E;
+  --accent-lt: #E5CFA0;
+  --rule:      #DDD9D3;
+  --sidebar-w: 248px;
 }
 
-body{
-  display:flex;flex-direction:column;
-  font-family:var(--sans);
-  background:var(--bg);
-  color:var(--ink);
-  -webkit-font-smoothing:antialiased;
-}
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column}
 
 /* ── TOP BAR ── */
 .topbar{
@@ -434,9 +418,16 @@ function setActive(src) {
   });
 }
 
-function loadSrc(src) {
+async function loadSrc(src) {
   welcome.style.display = 'none';
   iframe.style.display  = 'block';
+  // 파일 존재 여부 확인 — 없으면 준비 중 페이지로 대체
+  try {
+    const res = await fetch(src, { method: 'HEAD' });
+    if (!res.ok) src = 'placeholder.html';
+  } catch(e) {
+    src = 'placeholder.html';
+  }
   iframe.src = src;
   setActive(src);
   closeSidebar();
